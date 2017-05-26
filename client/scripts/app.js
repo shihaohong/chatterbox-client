@@ -29,8 +29,24 @@ var app = {
   },
   clearMessages: function() {},
   renderMessage: function(message) {
+    var {username, text, roomname} = message;
+
+    var chatDiv = document.createElement("div");
+    chatDiv.className = 'chat';
+
+    var usernameDiv = document.createElement("div");
+    usernameDiv.className = 'username';
+    usernameDiv.textContent = username + ':';
     
-    $("#chats").append(message);
+    var textDiv = document.createElement("div");
+    textDiv.className = 'text';
+    textDiv.textContent = text;
+
+    chatDiv.appendChild(usernameDiv);
+    chatDiv.appendChild(textDiv);
+
+    $("#chats").append(chatDiv);
   },
+  
   renderRoom: function() {}
 };
