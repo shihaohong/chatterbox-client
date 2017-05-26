@@ -31,22 +31,22 @@ var app = {
   renderMessage: function(message) {
     var {username, text, roomname} = message;
 
-    var chatDiv = document.createElement("div");
+    var chatDiv = document.createElement('div');
     chatDiv.className = 'chat';
 
-    var usernameDiv = document.createElement("div");
+    var usernameDiv = document.createElement('div');
     usernameDiv.className = 'username';
     usernameDiv.textContent = username + ':';
     
-    var textDiv = document.createElement("div");
+    var textDiv = document.createElement('div');
     textDiv.className = 'text';
     textDiv.textContent = text;
 
     chatDiv.appendChild(usernameDiv);
     chatDiv.appendChild(textDiv);
 
-    $("#chats").append(chatDiv);
+    $('#chats').append(chatDiv);
   },
-  
+
   renderRoom: function() {}
 };
