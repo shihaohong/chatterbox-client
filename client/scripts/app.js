@@ -27,7 +27,12 @@ var app = {
       }
     });
   },
-  clearMessages: function() {},
+  clearMessages: function() {
+    var chatDiv = document.getElementById('chats');
+    while(chatDiv.firstChild) {
+      chatDiv.removeChild(chatDiv.firstChild);
+    }
+  },
   renderMessage: function(message) {
     var {username, text, roomname} = message;
 
