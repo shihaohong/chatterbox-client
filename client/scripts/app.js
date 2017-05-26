@@ -29,7 +29,7 @@ var app = {
   },
   clearMessages: function() {
     var chatDiv = document.getElementById('chats');
-    while(chatDiv.firstChild) {
+    while (chatDiv.firstChild) {
       chatDiv.removeChild(chatDiv.firstChild);
     }
   },
