@@ -34,8 +34,9 @@ var app = {
     }
   },
   renderMessage: function(message) {
-    var {username, text, roomname} = message;
+    var {username, text} = message;
 
+    // perhaps have to add message roomname to the class?
     var chatDiv = document.createElement('div');
     chatDiv.className = 'chat';
 
@@ -53,5 +54,11 @@ var app = {
     $('#chats').append(chatDiv);
   },
 
-  renderRoom: function() {}
+  renderRoom: function(roomName) {
+    var newOption = document.getElementById('roomSelect');
+    var option = document.createElement('option');
+    option.text = roomName;
+
+    newOption.add(option);
+  }
 };
