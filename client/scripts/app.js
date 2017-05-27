@@ -12,14 +12,25 @@ var app = {
     this.update();
   },
 
-  send: function(message) {
+  send: function() {
+    var message = {};
+    var textBox = document.getElementById('messageText');
+    var roomSelect = document.getElementById('roomSelect');
+
+    message.username = window.location.search.replace('?username=', '');
+    message.roomname = roomSelect.value;
+    message.text = textBox.value;
+    textBox.value = '';
+
+    this.renderRoom(this.messages);
+
     $.ajax({
       type: 'POST',
       url: this.server,
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function(message) {
-        console.log('chatterbox: Message sent');
+        console.log('chatterbox: Message sent', message);
       },
       error: function(message) {
         console.error('chatterbox: Failed to send message', data);
@@ -44,7 +55,7 @@ var app = {
   },
 
   extractMessage: function(message) {
-    this.messages.push(message);
+    this.messages.unshift(message);
   },
 
   clearMessages: function() {
@@ -74,6 +85,9 @@ var app = {
 
   renderRoom: function(messages) {
     var roomnames = {};
+    var roomSelect = document.getElementById('roomSelect');
+    var currentSelection = roomSelect.value;
+
     $('#roomSelect').empty();
 
     messages.forEach( function(message) {
@@ -88,20 +102,25 @@ var app = {
       option.text = roomname;
       newOption.add(option);
     });
+
+    roomSelect.value = currentSelection;
   },
 
   update: function() {
     console.log('update called');
-    var selectedRoom = 'loccy'; // Gotta grab the current room from DOM
+
     var renderMessage = this.renderMessage;
 
     this.clearMessages();
-    this.renderRoom(this.messages);
+    // These next 2 lines filter the messages by current room:
+    var roomSelect = document.getElementById('roomSelect');
+    var selectedRoom = roomSelect.value;
     this.messages.forEach( function(message) {
       if (message.roomname === selectedRoom) {
         renderMessage(message);
       }
     });
+
     boundUpdate = this.update.bind(this);
     setTimeout(boundUpdate, 500);
   }

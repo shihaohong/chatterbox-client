@@ -19,8 +19,6 @@
       }
     </script>
     <!-- your scripts -->
-    <script src="env/config.js"></script>
-    <script src="scripts/app.js"></script>
   </head>
   <body>
     <div id="main">
@@ -28,12 +26,13 @@
       <p>Room:
         <select id="roomSelect"></select>
       </p>
-      <form>
-        <input type="text">
-        <button>Submit!</button>
-      </form>
+      <input id="messageText" type="text">
+      <button id="submitBtn" onclick="app.send()" >Submit!</button>
+
       
     </div>
     <div id="chats"></div>
+    <script src="env/config.js"></script>
+    <script src="scripts/app.js"></script>
   </body>
 </html>
