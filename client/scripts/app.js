@@ -2,8 +2,14 @@ var app = {
   
   server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages',
 
+  messages: [],
+
   init: function() {
     this.fetch();
+    var boundRender = this.renderRoom.bind(this);
+    setTimeout( boundRender(this.messages), 2000);
+
+    this.update();
   },
 
   send: function(message) {
@@ -22,8 +28,7 @@ var app = {
   },
 
   fetch: function() { 
-    var messages = this.messages;
-    var that = this;
+    var extractMessage = this.extractMessage.bind(this);
 
     $.ajax({
       type: 'GET',
@@ -31,19 +36,19 @@ var app = {
       contentType: 'application/json',
       success: function(data) {
         console.log('data coming back: ', data);
-        messages = data.results;
-        messages.forEach((message) => {
-          that.renderMessage(message);
+        data.results.forEach((message) => {
+          extractMessage(message);
         });
       }
     });
   },
 
+  extractMessage: function(message) {
+    this.messages.push(message);
+  },
+
   clearMessages: function() {
-    var chatDiv = document.getElementById('chats');
-    while (chatDiv.firstChild) {
-      chatDiv.removeChild(chatDiv.firstChild);
-    }
+    $('#chats').empty();
   },
 
   renderMessage: function(message) {
@@ -67,11 +72,39 @@ var app = {
     $('#chats').append(chatDiv);
   },
 
-  renderRoom: function(roomName) {
-    var newOption = document.getElementById('roomSelect');
-    var option = document.createElement('option');
-    option.text = roomName;
+  renderRoom: function(messages) {
+    var roomnames = {};
+    $('#roomSelect').empty();
 
-    newOption.add(option);
+    messages.forEach( function(message) {
+      if (message.roomname) {
+        roomnames[message.roomname] = true;
+      }
+    });
+
+    Object.keys(roomnames).forEach( function(roomname) {
+      var newOption = document.getElementById('roomSelect');
+      var option = document.createElement('option');
+      option.text = roomname;
+      newOption.add(option);
+    });
+  },
+
+  update: function() {
+    console.log('update called');
+    var selectedRoom = 'loccy'; // Gotta grab the current room from DOM
+    var renderMessage = this.renderMessage;
+
+    this.clearMessages();
+    this.renderRoom(this.messages);
+    this.messages.forEach( function(message) {
+      if (message.roomname === selectedRoom) {
+        renderMessage(message);
+      }
+    });
+    boundUpdate = this.update.bind(this);
+    setTimeout(boundUpdate, 500);
   }
 };
+
+app.init();
