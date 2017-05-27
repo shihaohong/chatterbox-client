@@ -33,7 +33,7 @@ var app = {
         messages = data.results;
         messages.forEach((message) => {
           that.renderMessage(message);
-        })
+        });
       }
     });
   },
@@ -44,7 +44,7 @@ var app = {
       chatDiv.removeChild(chatDiv.firstChild);
     }
   },
-  
+
   renderMessage: function(message) {
     var {username, text} = message;
 
