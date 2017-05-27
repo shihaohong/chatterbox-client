@@ -1,7 +1,10 @@
 // YOUR CODE HERE:
 var app = {
+  
   server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages',
+
   init: function() {},
+
   send: function(data) {
     $.ajax({
       type: 'POST',
@@ -16,6 +19,7 @@ var app = {
       }
     });
   },
+
   fetch: function(data) {
     $.ajax({
       type: 'GET',
@@ -27,12 +31,14 @@ var app = {
       }
     });
   },
+
   clearMessages: function() {
     var chatDiv = document.getElementById('chats');
     while (chatDiv.firstChild) {
       chatDiv.removeChild(chatDiv.firstChild);
     }
   },
+
   renderMessage: function(message) {
     var {username, text} = message;
 
