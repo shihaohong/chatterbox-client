@@ -1,38 +1,50 @@
-// YOUR CODE HERE:
 var app = {
   server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages',
-  init: function() {},
-  send: function(data) {
+
+  init: function() {
+    this.fetch();
+  },
+
+  send: function(message) {
     $.ajax({
       type: 'POST',
       url: this.server,
-      data: JSON.stringify(data),
+      data: JSON.stringify(message),
       contentType: 'application/json',
-      success: function(data) {
+      success: function(message) {
         console.log('chatterbox: Message sent');
       },
-      error: function(data) {
+      error: function(message) {
         console.error('chatterbox: Failed to send message', data);
       }
     });
   },
-  fetch: function(data) {
+
+  fetch: function() { 
+    var messages = this.messages;
+    var that = this;
+
     $.ajax({
       type: 'GET',
       url: this.server,
-      data: JSON.stringify(data),
       contentType: 'application/json',
       success: function(data) {
-        console.log('chatterbox: Load was performed');
+        console.log('data coming back: ', data);
+        messages = data.results;
+        messages.forEach((message) => {
+          that.renderMessage(message);
+        })
       }
     });
   },
+
   clearMessages: function() {
     var chatDiv = document.getElementById('chats');
     while (chatDiv.firstChild) {
       chatDiv.removeChild(chatDiv.firstChild);
     }
   },
+  
   renderMessage: function(message) {
     var {username, text} = message;
 
@@ -62,3 +74,4 @@ var app = {
     newOption.add(option);
   }
 };
+
