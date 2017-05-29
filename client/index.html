@@ -18,18 +18,18 @@
         window.location.search = newSearch;
       }
     </script>
-    <!-- your scripts -->
   </head>
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <p>Room:
+      <div>Room: 
         <select id="roomSelect"></select>
-      </p>
-      <input id="messageText" type="text">
-      <button id="submitBtn" onclick="app.send()" >Submit!</button>
-
-      
+        <br>
+        <form id="send">
+          <input type="textbox" id="message"></input>
+          <input type="submit"/>
+        </form>
+      </div>
     </div>
     <div id="chats"></div>
     <script src="env/config.js"></script>
