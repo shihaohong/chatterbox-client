@@ -22,17 +22,22 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <div>Room: 
-        <select id="roomSelect"></select>
-        <br>
-        <form id="send">
-          <input type="textbox" id="message"></input>
-          <input type="submit"/>
-        </form>
+      <div class="spinner"><img src="images/spiffygif_46x46.gif"></div>
+      <div id="rooms">
+        Room: 
+        <select id="roomSelect">
+        </select>
+      </div>
+      <br>
+      <form id="send" method="post" action="#">
+        <input type="textbox" id="message"></input>
+        <input type="submit" class="submit"/>
+      </form>
       </div>
     </div>
     <div id="chats"></div>
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
+    <script> $(function () { app.init() }) </script>
   </body>
 </html>

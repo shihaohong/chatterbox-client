@@ -5,8 +5,10 @@ var app = {
   username: 'anonymous',
   roomname: 'lobby',
   roomList: {},
+  friends: [],
 
   init: function() {
+    app.startSpinner();
     app.username = window.location.search.substr(10);
     
     // jQuery selector caching
@@ -19,6 +21,7 @@ var app = {
     // create listeners
     app.$send.on('submit', app.handleSubmit);
     app.$roomSelect.on('change', app.handleRoomChange);
+    app.$chats.on('click', '.username', app.handleUsernameClick);
 
     // get data from server and render all messages
     app.fetch();
@@ -27,11 +30,22 @@ var app = {
     setInterval(function() { app.fetch(); }, 3000);
   },
 
+  handleUsernameClick: function(event) {
+    var username = $(event.target).data('username');
+
+    if (username !== undefined) {
+      app.friends[username] = !app.friends[username];
+
+      var selector = '[data-username="' + username.replace(/"/g, '\\\"' + '"]');
+      var $usernames = $(selector).toggleClass('friend');
+    }
+  },
+
   handleSubmit: function(event) {
 
     var message = {
       username: app.username,
-      text: app.$message.val(),
+      text: app.escapeHTML(app.$message.val()),
       roomname: app.roomname || 'lobby'
     };
 
@@ -62,6 +76,8 @@ var app = {
   },
 
   send: function(message) {
+    app.startSpinner();
+
     $.ajax({
       type: 'POST',
       url: app.server,
@@ -122,13 +138,19 @@ var app = {
         return false;
       }
     }).forEach(app.renderMessage);
+
+    app.stopSpinner();
   },
 
   renderMessage: function(message) {
     var $chat = $('<div class="chat"/>');
 
     var $username = $('<span class="username"/>');
-    $username.text(message.username + ': ').appendTo($chat);
+    $username.text(message.username + ': ').attr('data-username', message.username).appendTo($chat);
+
+    if (app.friends[message.username] === true) {
+      $username.addClass('friend');
+    }
 
     var $message = $('<br><span/>');
     $message.text(message.text).appendTo($chat);
@@ -161,7 +183,16 @@ var app = {
     }
     string.replace('alert', '');
     return string.replace(/[&<>"'=\/]/g, '');
-  }
-};
+  },
 
-app.init();
+  startSpinner: function() {
+    $('.spinner img').show();
+    $('form input[type="submit"]').attr('disabled', true);
+  },
+
+  stopSpinner: function() {
+    $('.spinner img').fadeOut('fast');
+    $('form input[type="submit"]').attr('disabled', null);
+  }
+
+};
